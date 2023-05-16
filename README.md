@@ -1,2 +1,2 @@
 # GestionDeFichiersSimple
-Structure arborescente de dossiers(répertoires) codé en langage JAVA
+Une structure arborescente de dossiers(répertoires) codée en langage JAVA
