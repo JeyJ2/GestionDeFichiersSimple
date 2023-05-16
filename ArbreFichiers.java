@@ -78,20 +78,58 @@ public class ArbreFichiers{
 
     }
 
-    public void supprimer(){
-        if(this.pere==null){
+    public void supprimer(){ //méthode 2
+        ArbreFichiers p = this.pere;
+        ArbreFichiers g = this.frereGauche;
+        ArbreFichiers d = this.frereDroit;
+    //le cas où le dossier à supprimer est la racine ?? appeler .premierFils lorsque p =null
 
+        if(g==null){
+            if(d==null) p.premierFils = null;
+            else p.premierFils = d;
         }else{
-            ArbreFichiers p = this.pere;
-            ArbreFichiers g = this.frereGauche;
-            ArbreFichiers d = this.frereDroit;
-
-            if(p.premierFils==this){
-                p.premierFils=d;
-                
+            if(d==null) g.frereDroit = null;
+            else{
+                g.frereDroit = d;
+                d.frereGauche = g;
             }
         }
+        ArbreFichiers element = p;
+        while(p!=null){
+            element.taille -= this.taille;
+            element = element.pere;
+        }
+
+        this.pere=null;
+        this.frereDroit=null;
+        this.frereGauche=null;
     }
+
+    public String lsContenu(){ //méthode 3
+        String res="";
+        ArbreFichiers element= this.premierFils;
+        while(element!=null){
+            if(element.estFichier){
+                res="f ";
+            }else{
+                res="d ";
+            }
+            res+=element.nom;
+            res+=" "+element.taille+" octets \n";
+        }
+        return res;
+    }
+
+    public String pwdChemin(){ //méthode 4
+        String res = this.nom;
+        ArbreFichiers element = this.pere;
+        while(element!=null){
+            res = element.nom+"/"+res;
+            element = element.pere;
+        }
+        return res;
+    }
+    
 
 
 
