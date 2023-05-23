@@ -19,6 +19,18 @@ public class ArbreFichiers{
         return contenu;
     }
 
+    public int getTaille(){
+        return taille;
+    }
+
+    public String getNom(){
+        return nom;
+    }
+
+    public ArbreFichiers getPremierFils(){
+        return premierFils;
+    }
+
     public ArbreFichiers(
         ArbreFichiers pere,
         ArbreFichiers premierFils,
@@ -35,7 +47,7 @@ public class ArbreFichiers{
         this.nom = nom;
         this.estFichier = estFichier;
         this.contenu = contenu;
-        this.taille = contenu.length();
+        if(contenu!=null) this.taille = contenu.length(); else this.taille = 0;
     }
 
     public void addFils(ArbreFichiers nouveauFils){ //méthode 1
@@ -56,11 +68,11 @@ public class ArbreFichiers{
             if(dernier){
                 element.frereDroit=nouveauFils;
                 nouveauFils.frereGauche =element;
-                nouveauFils.frereDroit = null;
+                nouveauFils.frereDroit = null; //pas nécessaire
             }else{
                 nouveauFils.frereDroit = element;
                 nouveauFils.frereGauche = element.frereGauche;
-                element.frereGauche.frereDroit = nouveauFils;
+                if(element.frereGauche!=null) element.frereGauche.frereDroit = nouveauFils;
                 element.frereGauche = nouveauFils;
                 if(this.premierFils==element){
                     this.premierFils = nouveauFils;
@@ -106,16 +118,18 @@ public class ArbreFichiers{
     }
 
     public String lsContenu(){ //méthode 3
-        String res="";
+        String Newligne=System.getProperty("line.separator");
+        String res="Voici la liste du contenu de : "+this.nom+" "+this.taille+ " octets "+Newligne;
         ArbreFichiers element= this.premierFils;
         while(element!=null){
             if(element.estFichier){
-                res="f ";
+                res+="f ";
             }else{
-                res="d ";
+                res+="d ";
             }
             res+=element.nom;
-            res+=" "+element.taille+" octets \n";
+            res+=" "+element.taille+" octets "+Newligne;
+            element = element.frereDroit;
         }
         return res;
     }
@@ -129,7 +143,48 @@ public class ArbreFichiers{
         }
         return res;
     }
-    
+    public ArbreFichiers cheminRelatif(String chemin){
+        if(chemin=="..") return this.pere;
+        ArbreFichiers element=this.premierFils;
+        while(element!=null && !element.nom.equals(chemin)){
+            element = element.frereDroit;
+        }
+        return element;
+    }
+    public void setNom(String nom){
+        ArbreFichiers pere = this.pere;
+        this.supprimer();
+        this.nom = nom;
+        pere.addFils(this);
+    }
+
+    public String nomLocate(String nom){
+        String res = "";
+        if(this.nom.contains(nom)){
+            res += this.pwdChemin()+"\n";
+        }
+        ArbreFichiers element = this.premierFils;
+        while(element!=null){
+            res += element.nomLocate(nom);
+            element = element.frereDroit;
+        }
+        return res;
+    }
+
+    public String chercheGrep(String text){
+        String res = "";
+        if(this.estFichier && this.contenu.contains(text)){
+            res += this.pwdChemin()+"\n";
+        }else{
+            ArbreFichiers element = this.premierFils;
+            while(element!=null){
+                res += element.nomLocate(text);
+                element = element.frereDroit;
+            }
+        }
+        return res;
+    }
+
 
 
 
