@@ -12,12 +12,14 @@ public class ArborescenceInitiale {
             BufferedReader lecteur = new BufferedReader(new FileReader(nomFichier));
             String ligne = lecteur.readLine();
             
+            //on crée le dossier racine sinon on lève une exception
             if(ligne.equalsIgnoreCase("racine")){
                 noeudCourant = new ArbreFichiers(null,null,null,null,"",false,null);
             }else{
                 lecteur.close();
                 throw new IllegalArgumentException("Debut fichier non valide : doit commencer par racine");
             }
+            //tant qu'on trouve le mot 'fin' isoler on  continue à implementer notre arborescence de fichiers et dossiers
             while(!ligne.equalsIgnoreCase("fin")){
                 ligne=lecteur.readLine();
                 String [] tab = ligne.split(" ");
@@ -30,14 +32,17 @@ public class ArborescenceInitiale {
                     ligne = lecteur.readLine();
                     ArbreFichiers nouveauFils = new ArbreFichiers(null, null, null, null, nom , true, ligne);
                     noeudCourant.addFils(nouveauFils);
+                    //les cas de dossier et fichiers ont été déjà traités donc ce mot 'fin'  ne correspond pas à un nom de dossier ou fichier
                 }else if(tab.length>1 && tab[1].equals("fin")){
                     noeudCourant = noeudCourant.getPere();
                 }
             }
             lecteur.close(); 
         }catch(IOException e){
-            System.out.println("un problème avec le fichier texte lors de crération de l'arborescenece initiale");
+            System.out.println("un problème avec le fichier texte lors de crération de l'arborescence initiale");
         }
+
+        //ici le noeudCourant retourné sera la racine ("d'après le format de notre fichier texte ")
         return noeudCourant;
     }
 }

@@ -1,0 +1,30 @@
+racine
+* fichier1 f %ce fichier est inclus dans le dossier racine
+mon 1er fichier
+* sd1 d
+** fichier2 f
+mon 2eme fichier
+** sd2 d
+*** fichier3 f
+mon 3eme fichier
+*** sd3 d
+**** fichier4 f
+mon 4eme fichier
+**** fin f
+fichier qui s'appelle fin
+*** fin %fin sd3 : on remonte d'un cran, en sd2
+*** sd4 d
+**** fichier5 f
+mon 5eme fichier
+*** fin %fin sd4 : on remonte d'un cran, en sd2
+** fin % fin sd2 : on remonte d'un cran, en sd1
+** sd5 d
+*** fichier6 f
+mon 6eme fichier
+** fin %fin sd5 : on remonte d'un cran, en sd1
+* fin %fin sd1 : on remonte d'un cran (racine)
+* sd6 d
+** fichier7 f
+mon 7eme fichier
+* fin %fin sd6 : on remonte d'un cran (racine)
+fin
