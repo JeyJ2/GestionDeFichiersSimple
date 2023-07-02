@@ -8,6 +8,26 @@ public class ArbreFichiers{
     private String contenu; //null si c'est un dossier
     private int taille; //nbr de caract du contenu si fichier sinon la somme
 
+
+    public ArbreFichiers(
+        ArbreFichiers pere,
+        ArbreFichiers premierFils,
+        ArbreFichiers frereDroit,
+        ArbreFichiers frereGauche,
+        String nom,
+        boolean estFichier,
+        String contenu
+    ) {
+        this.pere = pere;
+        this.premierFils = premierFils;
+        this.frereDroit = frereDroit;
+        this.frereGauche = frereGauche;
+        this.nom = nom;
+        this.estFichier = estFichier;
+        this.contenu = contenu;
+        if(contenu!=null) this.taille = contenu.length(); else this.taille = 0;
+    }
+
     public ArbreFichiers getPere(){
         return pere;
     }
@@ -31,25 +51,7 @@ public class ArbreFichiers{
         return premierFils;
     }
 
-    public ArbreFichiers(
-        ArbreFichiers pere,
-        ArbreFichiers premierFils,
-        ArbreFichiers frereDroit,
-        ArbreFichiers frereGauche,
-        String nom,
-        boolean estFichier,
-        String contenu
-    ) {
-        this.pere = pere;
-        this.premierFils = premierFils;
-        this.frereDroit = frereDroit;
-        this.frereGauche = frereGauche;
-        this.nom = nom;
-        this.estFichier = estFichier;
-        this.contenu = contenu;
-        if(contenu!=null) this.taille = contenu.length(); else this.taille = 0;
-    }
-
+    
     public void addFils(ArbreFichiers nouveauFils){ //méthode 1
         if(nouveauFils== null){
             throw new IllegalArgumentException();
@@ -107,7 +109,7 @@ public class ArbreFichiers{
             }
         }
         ArbreFichiers element = p;
-        while(p!=null){
+        while(element!=null){
             element.taille -= this.taille;
             element = element.pere;
         }
@@ -119,7 +121,12 @@ public class ArbreFichiers{
 
     public String lsContenu(){ //méthode 3
         String Newligne=System.getProperty("line.separator");
-        String res="Voici la liste du contenu de : "+this.nom+" "+this.taille+ " octets "+Newligne;
+        String res=null;
+        if(this.pere==null){
+            res="Voici le contenu de : la Racine "+this.taille+ " octets "+Newligne;
+        }else{
+            res = "Voici la liste du contenu de : "+this.nom+" "+this.taille+ " octets "+Newligne;
+        }
         ArbreFichiers element= this.premierFils;
         while(element!=null){
             if(element.estFichier){
@@ -143,13 +150,14 @@ public class ArbreFichiers{
         }
         return res;
     }
-    public ArbreFichiers cheminRelatif(String chemin){
-        if(chemin=="..") return this.pere;
+    public ArbreFichiers cheminRelatif(String nom){ //méthode 5
+        if(nom.equals("..")) return this.pere;
         ArbreFichiers element=this.premierFils;
-        while(element!=null && !element.nom.equals(chemin)){
+        while(element!=null && !element.nom.equals(nom)){
             element = element.frereDroit;
         }
         return element;
+        //dans le cas où auccun des fils porte le nom cherché, element=null est renvoyé
     }
     public void setNom(String nom){
         ArbreFichiers pere = this.pere;

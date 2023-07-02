@@ -3,6 +3,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ArborescenceInitiale {
+
+
+    //cette méthode lit le fichier texte et retourne un ArbreFichiers initiale
     public static ArbreFichiers lectureFichierTxt(String nomFichier){
         ArbreFichiers noeudCourant = null ;
         try{
